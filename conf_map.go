@@ -45,7 +45,7 @@ var (
 	ConfMap map[string]reflect.Type = make(map[string]reflect.Type)
 
 	// struct name => mongo db collection name
-	DBColMap map[string]string = make(map[string]string)
+	Struct2ColMap map[string]string = make(map[string]string)
 
 	// embedding struct name => reflect type of a pointer to struct
 	EmbeddingStructMap map[string]reflect.Type = make(map[string]reflect.Type)
@@ -55,23 +55,42 @@ var (
 )
 
 func init() {
-	File2StructMap[HELLO_WORLD_FILE] = HELLO_WORLD_STRUCT
+	// File2StructMap[HELLO_WORLD_FILE] = HELLO_WORLD_STRUCT
+	// File2StructMap[GAME_MODE_FILE] = GAME_MODE_STRUCT
 
-	File2SheetMap[HELLO_WORLD_FILE] = HELLO_WORLD_SHEET_NAME
+	// 配置数据文件名 => 数据结构体名
+	File2StructMap = map[string]string{
+		HELLO_WORLD_FILE: HELLO_WORLD_STRUCT,
+		GAME_MODE_FILE:   GAME_MODE_STRUCT,
+	}
+
+	// File2SheetMap[HELLO_WORLD_FILE] = HELLO_WORLD_SHEET_NAME
+	// File2SheetMap[GAME_MODE_FILE] = GAME_MODE_SHEET_NAME
+
+	// 配置数据文件名 => excel sheet name
+	File2SheetMap = map[string]string{
+		HELLO_WORLD_FILE: HELLO_WORLD_SHEET_NAME,
+		GAME_MODE_FILE:   GAME_MODE_SHEET_NAME,
+	}
 
 	// ConfMap[HELLO_WORLD_STRUCT] = unsafe.Pointer(new(conf.Foo))
 	ConfMap[HELLO_WORLD_STRUCT] = reflect.TypeOf(*(new(conf.Foo)))
-
-	DBColMap[HELLO_WORLD_STRUCT] = HELLO_WORLD_COL_NAME
-
-	File2StructMap[GAME_MODE_FILE] = GAME_MODE_STRUCT
-
-	File2SheetMap[GAME_MODE_FILE] = GAME_MODE_SHEET_NAME
-
 	// ConfMap[GAME_MODE_STRUCT] = unsafe.Pointer(new(conf.GameMode))
 	ConfMap[GAME_MODE_STRUCT] = reflect.TypeOf(*(new(conf.GameMode)))
 
-	DBColMap[GAME_MODE_STRUCT] = GAME_MODE_COL_NAME
+	// 数据结构体名 => reflect type of a pointer to the struct
+	ConfMap = map[string]reflect.Type{
+		HELLO_WORLD_STRUCT: reflect.TypeOf(*(new(conf.Foo))),
+		GAME_MODE_STRUCT:   reflect.TypeOf(*(new(conf.GameMode))),
+	}
+
+	// Struct2ColMap[HELLO_WORLD_STRUCT] = HELLO_WORLD_COL_NAME
+	// Struct2ColMap[GAME_MODE_STRUCT] = GAME_MODE_COL_NAME
+
+	Struct2ColMap = map[string]string{
+		HELLO_WORLD_STRUCT: HELLO_WORLD_COL_NAME,
+		GAME_MODE_STRUCT:   GAME_MODE_COL_NAME,
+	}
 
 	EmbeddingStructMap[EMBEDDING_STRUCT_MODE_EXTRA] = reflect.TypeOf((new(conf.ModeExtra)))
 
